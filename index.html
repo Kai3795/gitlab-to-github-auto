@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- SEO Meta Tags -->
+  <title>GitLab to GitHub Auto Update • bocaletto-luca</title>
+  <meta name="description" content="Automate the import and mirroring of all your GitLab projects into GitHub. Bulk-create repos, trigger GitHub’s Import API, handle private & public projects.">
+  <meta name="keywords" content="GitLab, GitHub, repository mirroring, automation, import, sync, Python, API">
+  <meta name="author" content="bocaletto-luca">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:title" content="GitLab to GitHub Auto Update">
+  <meta property="og:description" content="Automate the import and mirroring of all your GitLab projects into GitHub with a single Python script.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://gitlab.com/bocaletto-luca/gitlab-to-github-auto">
+  <meta property="og:image" content="https://gitlab.com/bocaletto-luca/gitlab-to-github-auto/raw/main/assets/og-image.png">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem 2rem;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1, h2, h3 {
+      color: #222;
+      margin-top: 1.5rem;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 1rem;
+      overflow-x: auto;
+      border-radius: 4px;
+    }
+    code {
+      background: #eef;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    ul, ol {
+      margin-left: 1.2rem;
+    }
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>GitLab to GitHub Auto Update</h1>
+    <p>
+      <strong>GitLab to GitHub Auto Update</strong> is a Python tool that automates the import and mirroring of all your GitLab projects into GitHub. It handles bulk operations, auto-creates missing repos, and invokes GitHub’s Import API to keep both platforms in sync.
+    </p>
+
+    <h2>Features</h2>
+    <ul>
+      <li>Bulk-fetch all GitLab projects you’re a member of.</li>
+      <li>Auto-create GitHub repositories (public or private).</li>
+      <li>Trigger GitHub’s official Import API for seamless mirroring.</li>
+      <li>Supports private projects by passing your GitLab credentials.</li>
+      <li>Simple configuration via a single Python script.</li>
+    </ul>
+
+    <h2>Requirements</h2>
+    <ul>
+      <li>Python 3.6 or higher</li>
+      <li><code>requests</code> library (<code>pip install requests</code>)</li>
+      <li>GitLab Personal Access Token with <code>api</code> scope</li>
+      <li>GitHub Personal Access Token with <code>repo</code> scope</li>
+    </ul>
+
+    <h2>Installation</h2>
+    <ol>
+      <li>Clone this repository:
+        <pre><code>git clone https://gitlab.com/bocaletto-luca/gitlab-to-github-auto.git</code></pre>
+      </li>
+      <li>Enter the project directory:
+        <pre><code>cd gitlab-to-github-auto</code></pre>
+      </li>
+      <li>(Optional) Create and activate a virtual environment:
+        <pre><code>python3 -m venv venv
+source venv/bin/activate</code></pre>
+      </li>
+      <li>Install dependencies:
+        <pre><code>pip install requests</code></pre>
+      </li>
+    </ol>
+
+    <h2>Configuration</h2>
+    <p>Open <code>gitlab_to_github_auto_update.py</code> and set your credentials:</p>
+    <pre><code># GitLab settings
+GITLAB_URL      = "https://gitlab.com/api/v4"
+GITLAB_TOKEN    = "your_gitlab_token_here"
+GITLAB_USERNAME = "bocaletto-luca"
+
+# GitHub settings
+GITHUB_API_URL  = "https://api.github.com"
+GITHUB_TOKEN    = "your_github_token_here"
+GITHUB_USERNAME = "bocaletto-luca"</code></pre>
+    <p><em>Note:</em> Never commit your tokens in plaintext. Use environment variables or a <code>.env</code> file excluded from version control.</p>
+
+    <h2>Usage</h2>
+    <p>Run the script to start syncing:</p>
+    <pre><code>chmod +x gitlab_to_github_auto_update.py
+./gitlab_to_github_auto_update.py</code></pre>
+    <p>Or simply:</p>
+    <pre><code>python3 gitlab_to_github_auto_update.py</code></pre>
+    <p>You will see console output showing which repos were created or already existed, and the status of each import trigger.</p>
+
+    <h2>How It Works</h2>
+    <ol>
+      <li><strong>Fetch Projects:</strong> Calls GitLab’s <code>/projects?membership=true</code> endpoint, handling pagination.</li>
+      <li><strong>Check/Create on GitHub:</strong> Uses <code>GET /repos/{user}/{repo}</code> and <code>POST /user/repos</code> if missing.</li>
+      <li><strong>Trigger Import:</strong> Invokes <code>PUT /repos/{user}/{repo}/import</code> on GitHub, passing <code>vcs_url</code> and credentials for private repos.</li>
+    </ol>
+
+    <h2>Contributing</h2>
+    <p>Contributions, bug reports and feature requests are welcome! Please:</p>
+    <ol>
+      <li>Fork the repository.</li>
+      <li>Create a feature branch.</li>
+      <li>Submit a Merge Request on GitLab.</li>
+    </ol>
+
+    <h2>License</h2>
+    <p>This project is released under the <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>. See <code>LICENSE</code> for details.</p>
+
+    <footer>
+      &copy; 2025 <strong>bocaletto-luca</strong>.  
+      Hosted at <a href="https://gitlab.com/bocaletto-luca/gitlab-to-github-auto" target="_blank">gitlab.com/bocaletto-luca/gitlab-to-github-auto</a>.
+    </footer>
+  </div>
+</body>
+</html>
